@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: notification-microservice
+
+
+  rabbitmq:
+    username: guest
+    password: guest
+    host: rabbitmq
+    port: 5672
+
+elasticsearch:
+  address: 'elasticsearch:9200'

@@ -1,0 +1,68 @@
+version: '3.9'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.12-management-alpine
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - network
+
+  notification-service:
+    container_name: notification-service
+    build:
+      dockerfile: ./Dockerfile
+    depends_on:
+      - rabbitmq
+
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '1000m'
+        max-file: '10'
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - node.name=mail-messages-node
+      - discovery.seed_hosts=mail-messages-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - 'ES_JAVA_OPTS=-Xms4096m -Xmx4096m'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - '9200:9200'
+      - '9600:9600'
+    networks:
+      - network
+  kibana:
+    image: kibana:7.10.1
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '100m'
+        max-file: '3'
+    container_name: kibana
+    ports:
+      - '5601:5601'
+    expose:
+      - '5601'
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    networks:
+      - network
+
+networks:
+  network:
+    name: book_app_network
+    external: true
