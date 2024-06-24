@@ -13,7 +13,6 @@ public class ElasticsearchClientConfig extends ElasticsearchConfiguration {
     String esAddress;
 
     @Override
-    @Bean
     public ClientConfiguration clientConfiguration() {
         return ClientConfiguration.builder()
                 .connectedTo(esAddress)

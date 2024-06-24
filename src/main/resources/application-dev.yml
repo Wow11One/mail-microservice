@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: notification-microservice
+  elasticsearch:
+    connection-timeout: 30s
+  data:
+    elasticsearch:
+      cluster-nodes: adfas
+
+
+  rabbitmq:
+    connection-timeout: 1m
+
+elasticsearch:
+  address: 'localhost:9200'

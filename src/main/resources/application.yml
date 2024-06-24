@@ -2,12 +2,20 @@ spring:
   application:
     name: notification-microservice
 
-
+  mail:
+    host:
+  elasticsearch:
+    connection-timeout: 30s
   rabbitmq:
     username: guest
     password: guest
     host: rabbitmq
     port: 5672
+    connection-timeout: 15000
 
 elasticsearch:
   address: 'elasticsearch:9200'
+
+rabbitmq:
+  mailQueue:
+    name: mailQueue

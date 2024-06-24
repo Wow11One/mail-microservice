@@ -10,13 +10,6 @@ services:
     networks:
       - network
 
-  notification-service:
-    container_name: notification-service
-    build:
-      dockerfile: ./Dockerfile
-    depends_on:
-      - rabbitmq
-
   elasticsearch:
     image: elasticsearch:7.10.1
     logging:
@@ -42,8 +35,8 @@ services:
     ports:
       - '9200:9200'
       - '9600:9600'
-    networks:
-      - network
+
+
   kibana:
     image: kibana:7.10.1
     logging:
@@ -61,6 +54,14 @@ services:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     networks:
       - network
+
+  notification-service:
+    container_name: notification-service
+    build:
+      dockerfile: ./Dockerfile
+    depends_on:
+      - elasticsearch
+      - rabbitmq
 
 networks:
   network:
