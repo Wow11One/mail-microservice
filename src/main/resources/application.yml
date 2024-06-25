@@ -18,7 +18,7 @@ spring:
   elasticsearch:
     connection-timeout: 30s
   rabbitmq:
-    connection-timeout: 15000
+    connection-timeout: 30s
 
 elasticsearch:
   address: 'elasticsearch:9200'
