@@ -1,9 +1,11 @@
 package com.profitsoft.notification.microservice.entity;
 
+import com.profitsoft.notification.microservice.constants.MailMessageStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -17,7 +19,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @Getter
 @Setter
-public class EmailMessage {
+@ToString
+public class MailMessage {
 
     @Id
     String id;
@@ -33,4 +36,10 @@ public class EmailMessage {
 
     @Field(type = FieldType.Date)
     Instant sentAt;
+
+    @Field(type = FieldType.Text)
+    String errorMessage;
+
+    @Field(type = FieldType.Text)
+    MailMessageStatus status;
 }

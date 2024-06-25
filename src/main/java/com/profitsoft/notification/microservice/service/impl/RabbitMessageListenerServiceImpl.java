@@ -1,6 +1,7 @@
 package com.profitsoft.notification.microservice.service.impl;
 
 import com.profitsoft.notification.microservice.constants.RabbitMqQueues;
+import com.profitsoft.notification.microservice.dto.MailDto;
 import com.profitsoft.notification.microservice.service.MessageListenerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RabbitMessageListenerServiceImpl implements MessageListenerService {
 
+    @Override
     @RabbitListener(queues = {RabbitMqQueues.MAIL_QUEUE})
-    public void handleMailQueue() {
-
+    public void handleMailQueue(String message) {
+        System.out.println(message);
     }
 }

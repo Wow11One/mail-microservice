@@ -1,10 +1,11 @@
 package com.profitsoft.notification.microservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
+
+import java.time.Duration;
 
 @Configuration
 public class ElasticsearchClientConfig extends ElasticsearchConfiguration {
@@ -16,6 +17,7 @@ public class ElasticsearchClientConfig extends ElasticsearchConfiguration {
     public ClientConfiguration clientConfiguration() {
         return ClientConfiguration.builder()
                 .connectedTo(esAddress)
+                .withSocketTimeout(Duration.ofMinutes(2L))
                 .build();
     }
 }

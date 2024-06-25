@@ -3,13 +3,14 @@ spring:
     name: notification-microservice
   elasticsearch:
     connection-timeout: 30s
-  data:
-    elasticsearch:
-      cluster-nodes: adfas
-
-
+    socket-keep-alive: true
+    socket-timeout: 2m
   rabbitmq:
-    connection-timeout: 1m
+    username: user
+    password: password
+    host: localhost
+    port: 5672
+    connection-timeout: 15s
 
 elasticsearch:
   address: 'localhost:9200'

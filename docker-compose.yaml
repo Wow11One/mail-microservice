@@ -4,6 +4,9 @@ services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3.12-management-alpine
+    volumes:
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json:ro
     ports:
       - '5672:5672'
       - '15672:15672'
@@ -11,7 +14,7 @@ services:
       - network
 
   elasticsearch:
-    image: elasticsearch:7.10.1
+    image: elasticsearch:8.13.3
     logging:
       driver: 'json-file'
       options:
@@ -35,10 +38,17 @@ services:
     ports:
       - '9200:9200'
       - '9600:9600'
+    healthcheck:
+      test: curl -f http://elasticsearch:9200/_cat/health || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - network
 
 
   kibana:
-    image: kibana:7.10.1
+    image: kibana:8.13.3
     logging:
       driver: 'json-file'
       options:
@@ -59,9 +69,16 @@ services:
     container_name: notification-service
     build:
       dockerfile: ./Dockerfile
+    env_file: /.env
     depends_on:
-      - elasticsearch
-      - rabbitmq
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=user
+      - SPRING_RABBITMQ_PASSWORD=password
+      -
 
 networks:
   network:
