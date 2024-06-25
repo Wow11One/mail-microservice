@@ -18,7 +18,8 @@ public class MailException extends RuntimeException {
 
     public String getFullMessage() {
         return """
-                Error of %s class  occurred. Error message: %s
-                """.formatted(className, super.getMessage());
+                error of %s class occurred. Error message:
+                %s
+               """.formatted(className, super.getMessage());
     }
 }

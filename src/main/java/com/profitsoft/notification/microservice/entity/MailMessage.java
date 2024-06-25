@@ -2,8 +2,8 @@ package com.profitsoft.notification.microservice.entity;
 
 import com.profitsoft.notification.microservice.constants.MailMessageStatus;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +16,7 @@ import java.time.Instant;
 
 @Document(indexName = "email_messages")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -26,16 +26,25 @@ public class MailMessage {
     String id;
 
     @Field(type = FieldType.Text)
-    String from;
+    String sender;
 
     @Field(type = FieldType.Text)
-    String to;
+    String receiver;
+
+    @Field(type = FieldType.Text)
+    String subject;
+
+    @Field(type = FieldType.Text)
+    String body;
 
     @Field(type = FieldType.Integer)
     Integer sendAttempts;
 
     @Field(type = FieldType.Date)
-    Instant sentAt;
+    Instant createdAt;
+
+    @Field(type = FieldType.Date)
+    Instant lastAttemptTime;
 
     @Field(type = FieldType.Text)
     String errorMessage;

@@ -4,14 +4,16 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MailDto {
-    String to;
+    String receiver;
     String topic;
     String body;
 }

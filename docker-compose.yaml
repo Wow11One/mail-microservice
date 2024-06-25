@@ -74,11 +74,14 @@ services:
       elasticsearch:
         condition: service_healthy
     environment:
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=5672
-      - SPRING_RABBITMQ_USERNAME=user
-      - SPRING_RABBITMQ_PASSWORD=password
-      -
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: user
+      SPRING_RABBITMQ_PASSWORD: password
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_USERNAME: ${EMAIL_USERNAME}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      EMAIL_PORT: ${EMAIL_PORT}
 
 networks:
   network:
