@@ -50,5 +50,5 @@ public class MailMessage {
     String errorMessage;
 
     @Field(type = FieldType.Text)
-    MailMessageStatus status;
+    String status;
 }

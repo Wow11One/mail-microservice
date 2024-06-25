@@ -18,17 +18,14 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 
 @Service
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Slf4j
 public class RabbitMessageListenerService implements MessageListenerService {
 
-    final ObjectMapper objectMapper;
-    final MailMessageRepository mailMessageRepository;
-    final GoogleMailServiceImpl mailService;
-
-    @Value("${spring.mail.username}")
-    String senderEmail;
+    ObjectMapper objectMapper;
+    MailMessageRepository mailMessageRepository;
+    GoogleMailServiceImpl mailService;
 
     @Override
     public void handleMessage(String message) {
@@ -54,13 +51,13 @@ public class RabbitMessageListenerService implements MessageListenerService {
                     mailDto.getBody()
             );
 
-            mailMessage.setStatus(MailMessageStatus.SUCCESSFUL);
+            mailMessage.setStatus(MailMessageStatus.SUCCESSFUL.toString());
         } catch (MailException exception) {
             String errorMessage = exception.getFullMessage();
             log.error("Error occurred during the email sending: {}", errorMessage);
 
             mailMessage.setErrorMessage(errorMessage);
-            mailMessage.setStatus(MailMessageStatus.FAILED);
+            mailMessage.setStatus(MailMessageStatus.FAILED.toString());
             mailMessage.setFailedAttemptsCount(1);
         } catch (JacksonException exception) {
             log.error("Error occurred during a message deserialization: {}", exception.getMessage());

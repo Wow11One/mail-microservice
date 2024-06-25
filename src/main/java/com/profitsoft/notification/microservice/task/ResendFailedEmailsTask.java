@@ -1,5 +1,6 @@
 package com.profitsoft.notification.microservice.task;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.profitsoft.notification.microservice.constants.MailMessageStatus;
 import com.profitsoft.notification.microservice.entity.MailMessage;
 import com.profitsoft.notification.microservice.exception.MailException;
@@ -28,7 +29,7 @@ public class ResendFailedEmailsTask {
     MailMessageRepository mailMessageRepository;
     Integer BATCH_SIZE = 100;
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "${scheduler.cron-expr}")
     public void resendFailedEmails() {
         int currentPage = 0;
         int resentEmails = 0;
@@ -42,17 +43,15 @@ public class ResendFailedEmailsTask {
                     BATCH_SIZE,
                     Sort.by(Sort.Order.asc("lastAttemptTime"))
             );
-            failedEmailslist = mailMessageRepository.findByStatus(MailMessageStatus.FAILED, pageable)
-                    .getContent()
-                    .stream()
-                    .toList();
 
-            log.info(failedEmailslist.toString());
+            // search by enum value did not work, so I replaced it with a string value
+            failedEmailslist = mailMessageRepository.findByStatus(MailMessageStatus.FAILED.toString(), pageable)
+                   .getContent();
 
             if (failedEmailslist.isEmpty()) {
                 log.info(
                         """
-                        A failed emails resending task is over.
+                        The failed emails resending task is over.
                         {} out of {} emails resent successfully.
                         """,
                         resentEmails,
@@ -80,13 +79,15 @@ public class ResendFailedEmailsTask {
                     mailMessage.getBody()
             );
 
-            mailMessage.setStatus(MailMessageStatus.SUCCESSFUL);
+            mailMessage.setStatus(MailMessageStatus.SUCCESSFUL.toString());
+            mailMessage.setErrorMessage(null);
+
             log.info("Email with id #{} resent successfully", mailMessage.getId());
 
             return true;
         } catch (MailException exception) {
             String errorMessage = exception.getFullMessage();
-            log.error("Error occurred during an email resending: {}", errorMessage);
+            log.error("Error occurred during an email resending:{}", errorMessage);
 
             mailMessage.setErrorMessage(errorMessage);
             mailMessage.setFailedAttemptsCount(mailMessage.getFailedAttemptsCount() + 1);
