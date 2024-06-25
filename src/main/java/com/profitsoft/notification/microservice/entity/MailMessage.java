@@ -38,10 +38,10 @@ public class MailMessage {
     String body;
 
     @Field(type = FieldType.Integer)
-    Integer sendAttempts;
+    Integer failedAttemptsCount = 0;
 
     @Field(type = FieldType.Date)
-    Instant createdAt;
+    Instant createdAt = Instant.now();
 
     @Field(type = FieldType.Date)
     Instant lastAttemptTime;

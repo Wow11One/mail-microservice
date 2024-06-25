@@ -33,27 +33,19 @@ public class RabbitMessageListenerService implements MessageListenerService {
     @Override
     public void handleMessage(String message) {
         if (message == null) {
-            log.error("rabbit listener received a message with null value");
-            return;
-        }
-
-        MailDto mailDto;
-        try {
-            mailDto = objectMapper.readValue(message, MailDto.class);
-        } catch (JacksonException exception) {
-            log.error("error occurred during a message deserialization: {}", exception.getMessage());
+            log.error("Rabbit listener received a message with null value");
             return;
         }
 
         MailMessage mailMessage = new MailMessage();
         try {
+            MailDto mailDto = objectMapper.readValue(message, MailDto.class);
+
             mailMessage.setSender(mailDto.getReceiver());
             mailMessage.setReceiver(mailDto.getReceiver());
             mailMessage.setSubject(mailDto.getTopic());
             mailMessage.setBody(mailDto.getBody());
-            mailMessage.setCreatedAt(Instant.now());
             mailMessage.setLastAttemptTime(Instant.now());
-            mailMessage.setSendAttempts(1);
 
             mailService.sendEmail(
                     mailDto.getReceiver(),
@@ -64,17 +56,23 @@ public class RabbitMessageListenerService implements MessageListenerService {
 
             mailMessage.setStatus(MailMessageStatus.SUCCESSFUL);
         } catch (MailException exception) {
-            log.error("error occurred during the email sending: {}", exception.getFullMessage());
-            mailMessage.setErrorMessage(exception.getFullMessage());
+            String errorMessage = exception.getFullMessage();
+            log.error("Error occurred during the email sending: {}", errorMessage);
+
+            mailMessage.setErrorMessage(errorMessage);
             mailMessage.setStatus(MailMessageStatus.FAILED);
+            mailMessage.setFailedAttemptsCount(1);
+        } catch (JacksonException exception) {
+            log.error("Error occurred during a message deserialization: {}", exception.getMessage());
         } catch (Exception exception) {
-            log.error("unexpected error occurred in a message listener: {}. No message was saved",
+            log.error("Unexpected error occurred in a message listener: {}. No message was saved",
                     exception.getMessage());
         } finally {
             if (mailMessage.getStatus() != null) {
                 mailMessageRepository.save(mailMessage);
-                log.info("message with id #{} was saved to the db", mailMessage.getId());
+                log.info("Message with id #{} was saved to the db", mailMessage.getId());
             }
         }
+
     }
 }
