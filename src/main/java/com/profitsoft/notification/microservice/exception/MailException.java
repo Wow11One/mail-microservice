@@ -5,6 +5,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * The wrapper exception class for any error that occurs during the email sending.
+ * Method getFullMessage is used to specify the error causes and to save this text
+ * to the db with a MailMessage entity.
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Getter
 public class MailException extends RuntimeException {

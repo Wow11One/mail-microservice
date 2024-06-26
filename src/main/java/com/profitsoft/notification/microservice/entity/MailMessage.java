@@ -1,6 +1,5 @@
 package com.profitsoft.notification.microservice.entity;
 
-import com.profitsoft.notification.microservice.constants.MailMessageStatus;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +13,9 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.Instant;
 
+/**
+ * The data class for an email message entity.
+ */
 @Document(indexName = "email_messages")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor

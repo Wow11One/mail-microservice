@@ -7,6 +7,9 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 
 import java.time.Duration;
 
+/**
+ * The config class of an application
+ */
 @Configuration
 public class ElasticsearchClientConfig extends ElasticsearchConfiguration {
 

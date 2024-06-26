@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
+/**
+ * The DTO class for json deserialization during receiving a message from RabbitMQ.
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @NoArgsConstructor

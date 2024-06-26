@@ -10,10 +10,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+/**
+ * The class that implements a mail sending logic
+ */
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
-public class GoogleMailServiceImpl implements MailService {
+public class MailServiceImpl implements MailService {
 
     final JavaMailSender mailSender;
 

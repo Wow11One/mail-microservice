@@ -12,11 +12,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+/**
+ * The class that implements MessageListenerService interface using RabbitMQ
+ */
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -25,7 +27,7 @@ public class RabbitMessageListenerService implements MessageListenerService {
 
     ObjectMapper objectMapper;
     MailMessageRepository mailMessageRepository;
-    GoogleMailServiceImpl mailService;
+    MailServiceImpl mailService;
 
     @Override
     public void handleMessage(String message) {

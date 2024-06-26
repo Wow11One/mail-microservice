@@ -1,5 +1,6 @@
 package com.profitsoft.notification.microservice.config;
 
+import org.springframework.amqp.core.Queue;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
@@ -23,12 +24,16 @@ public class TestElasticsearchConfiguration extends ElasticsearchConfiguration {
         return container;
     }
 
+    @Bean
+    public Queue queue() {
+        return new Queue("mail.queue", false);
+    }
+
     // override ClientConfiguration bean
 
     @Override
     @Bean
     public ClientConfiguration clientConfiguration() {
-        System.out.println(" hello ");
         return ClientConfiguration.builder()
                 .connectedTo(elasticsearchContainer().getHttpHostAddress())
                 .build();

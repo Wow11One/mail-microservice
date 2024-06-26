@@ -1,6 +1,5 @@
 package com.profitsoft.notification.microservice.task;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.profitsoft.notification.microservice.constants.MailMessageStatus;
 import com.profitsoft.notification.microservice.entity.MailMessage;
 import com.profitsoft.notification.microservice.exception.MailException;
@@ -81,6 +80,7 @@ public class ResendFailedEmailsTask {
 
             mailMessage.setStatus(MailMessageStatus.SUCCESSFUL.toString());
             mailMessage.setErrorMessage(null);
+            mailMessageRepository.save(mailMessage);
 
             log.info("Email with id #{} resent successfully", mailMessage.getId());
 
