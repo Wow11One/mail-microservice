@@ -13,14 +13,14 @@ services:
     networks:
       - network
 
-  elasticsearch:
+  elasticsearch-db:
     image: elasticsearch:8.13.3
     logging:
       driver: 'json-file'
       options:
         max-size: '1000m'
         max-file: '10'
-    container_name: elasticsearch
+    container_name: elasticsearch-db
     environment:
       - discovery.type=single-node
       - node.name=mail-messages-node
@@ -39,13 +39,12 @@ services:
       - '9200:9200'
       - '9600:9600'
     healthcheck:
-      test: curl -f http://elasticsearch:9200/_cat/health || exit 1
+      test: curl -s -f elasticsearch-db:9200/_cat/health >/dev/null || exit 1
       interval: 30s
       timeout: 10s
-      retries: 5
+      retries: 10
     networks:
       - network
-
 
   kibana:
     image: kibana:8.13.3
@@ -60,8 +59,8 @@ services:
     expose:
       - '5601'
     environment:
-      ELASTICSEARCH_URL: http://elasticsearch:9200
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_URL: http://elasticsearch-db:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch-db:9200
     networks:
       - network
 
@@ -71,7 +70,7 @@ services:
       dockerfile: ./Dockerfile
     env_file: /.env
     depends_on:
-      elasticsearch:
+      elasticsearch-db:
         condition: service_healthy
     environment:
       SPRING_RABBITMQ_HOST: rabbitmq
@@ -82,6 +81,9 @@ services:
       EMAIL_USERNAME: ${EMAIL_USERNAME}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
       EMAIL_PORT: ${EMAIL_PORT}
+      ELASTICSEARCH_ADDRESS: 'elasticsearch-db:9200'
+    networks:
+        - network
 
 networks:
   network:

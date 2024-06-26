@@ -16,13 +16,15 @@ spring:
               true
 
   elasticsearch:
-    connection-timeout: 30s
+    connection-timeout: 1m
+    socket-timeout: 1m
+    socket-keep-alive: true
   rabbitmq:
     connection-timeout: 30s
 
 scheduler:
-  cron-expr: '* */5 * * * *'
+  cron-expr: '0 */5 * * * *'
 
 elasticsearch:
-  address: 'elasticsearch:9200'
+  address: ${ELASTICSEARCH_ADDRESS}
 
