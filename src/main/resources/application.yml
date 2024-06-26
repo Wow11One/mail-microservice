@@ -3,10 +3,10 @@ spring:
     name: notification-microservice
 
   mail:
-    host: ${EMAIL_HOST}
-    username: ${EMAIL_USERNAME}
-    password: ${EMAIL_PASSWORD}
-    port: ${EMAIL_PORT}
+    host: ${EMAIL_HOST:some_host}
+    username: ${EMAIL_USERNAME:some_user'}
+    password: ${EMAIL_PASSWORD:some_password}
+    port: ${EMAIL_PORT:800}
     properties:
       mail:
         smtp:
@@ -19,6 +19,9 @@ spring:
     connection-timeout: 30s
   rabbitmq:
     connection-timeout: 30s
+
+scheduler:
+  cron-expr: '* */5 * * * *'
 
 elasticsearch:
   address: 'elasticsearch:9200'

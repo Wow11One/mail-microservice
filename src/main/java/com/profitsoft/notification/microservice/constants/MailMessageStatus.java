@@ -1,8 +1,8 @@
 package com.profitsoft.notification.microservice.constants;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-@JsonFormat(shape = JsonFormat.Shape.STRING)
+/**
+ * Enumeration for the email status.
+ */
 public enum MailMessageStatus {
     SUCCESSFUL,
     FAILED

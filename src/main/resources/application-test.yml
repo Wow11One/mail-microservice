@@ -1,3 +1,4 @@
 scheduler:
-  cron-expr: '*/5 * * * *'
+  cron-expr: '-'
+
 
